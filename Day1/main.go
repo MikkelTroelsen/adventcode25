@@ -10,35 +10,75 @@ import (
 
 func main() {
 	rotations := parseInput()
+	// rotations := []string{"L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82"}
+	part1(&rotations)
+	part2(&rotations)
+}
+
+func part1(rotations *[]string) {
 	currentNum := 50
 	password := 0
-	for _, rotation := range rotations {
+	for _, rotation := range *rotations {
 		way := rotation[:1]
 		clicks, err := strconv.Atoi(rotation[1:])
 		if err != nil {
 			log.Fatal("Cant parse click to int: ", err)
 		}
-		fmt.Print("We move the dial: " + rotation)
 		if way == "L" {
+			currentNum -= clicks
+		} else {
 			currentNum += clicks
 		}
-		if way == "R" {
+		if currentNum%100 == 0 {
+			password++
+		}
+	}
+	fmt.Println(password)
+}
+
+func part2(rotations *[]string) {
+	currentNum := 50
+	password := 0
+	fmt.Println(currentNum, "Password: ", password)
+
+	prev := 50
+	for _, rotation := range *rotations {
+
+		way := rotation[:1]
+		clicks, err := strconv.Atoi(rotation[1:])
+
+		if err != nil {
+			log.Fatal("Cant parse click to int: ", err)
+		}
+		if way == "L" {
 			currentNum -= clicks
+		} else {
+			currentNum += clicks
 		}
-		//fmt.Print(" Current number: ")
-		fmt.Println(currentNum)
-		for currentNum < 0 {
-			currentNum += 100
-		}
-		if currentNum > 100 {
-			currentNum = 100 % currentNum
+		if way == "L" && prev == 0 {
+			fmt.Println("prev", prev)
+			password--
 		}
 
-		fmt.Print("Current number after mod: ")
-		fmt.Println(currentNum)
+		for currentNum > 100 {
+			currentNum -= 100
+			password++
+		}
+		for currentNum < 0 {
+			currentNum += 100
+			password++
+		}
 		if currentNum == 0 {
 			password++
 		}
+		if currentNum == 100 {
+			currentNum -= 100
+			password++
+		}
+
+		prev = currentNum
+
+		fmt.Println(rotation, " -> ", currentNum, "Password: ", password)
 	}
 	fmt.Println(password)
 }
