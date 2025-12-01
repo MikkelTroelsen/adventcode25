@@ -10,7 +10,7 @@ import (
 
 func main() {
 	rotations := parseInput()
-	// rotations := []string{"L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82"}
+	//rotations := []string{"L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82"}
 	part1(&rotations)
 	part2(&rotations)
 }
@@ -45,26 +45,32 @@ func part2(rotations *[]string) {
 	for _, rotation := range *rotations {
 
 		way := rotation[:1]
-		clicks, err := strconv.Atoi(rotation[1:])
+		clicksString := rotation[1:]
+		if len := len(clicksString); len > 2 {
+			hundredClicks, _ := strconv.Atoi(clicksString[:len-2])
+			password += hundredClicks
+			clicksString = clicksString[len-2:]
+		}
+		clicks, err := strconv.Atoi(clicksString)
 
 		if err != nil {
-			log.Fatal("Cant parse click to int: ", err)
+			log.Fatal("Cant parse 'click' to int: ", err)
 		}
 		if way == "L" {
 			currentNum -= clicks
 		} else {
 			currentNum += clicks
 		}
+
 		if way == "L" && prev == 0 {
-			fmt.Println("prev", prev)
 			password--
 		}
 
-		for currentNum > 100 {
+		if currentNum > 100 {
 			currentNum -= 100
 			password++
 		}
-		for currentNum < 0 {
+		if currentNum < 0 {
 			currentNum += 100
 			password++
 		}
@@ -77,8 +83,6 @@ func part2(rotations *[]string) {
 		}
 
 		prev = currentNum
-
-		fmt.Println(rotation, " -> ", currentNum, "Password: ", password)
 	}
 	fmt.Println(password)
 }
