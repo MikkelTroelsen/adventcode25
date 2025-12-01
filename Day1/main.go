@@ -39,7 +39,6 @@ func part1(rotations *[]string) {
 func part2(rotations *[]string) {
 	currentNum := 50
 	password := 0
-	fmt.Println(currentNum, "Password: ", password)
 
 	prev := 50
 	for _, rotation := range *rotations {
