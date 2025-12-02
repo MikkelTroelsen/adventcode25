@@ -70,6 +70,9 @@ func DuplicateDigits(digit int) int {
 	return doubleDigit
 }
 
+func part2(input string) {
+
+}
 func parseInput() string {
 	data, err := os.ReadFile("input.txt")
 	if err != nil {
